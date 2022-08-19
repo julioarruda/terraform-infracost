@@ -9,7 +9,8 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.TF_ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}      
+      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}
+      INFRACOST_ENABLE_CLOUD: true
     
 
     name: Run Infracost
@@ -37,14 +38,11 @@ jobs:
         run: terraform show -json tfplan.binary > plan.json
         working-directory: ${{ env.working-directory }}
 
-      - name: Terraform show
-        run: terraform apply -auto-approve
-        working-directory: ${{ env.working-directory }}        
 
       # Install the Infracost CLI, see https://github.com/infracost/actions/tree/master/setup
       # for other inputs such as version, and pricing-api-endpoint (for self-hosted users).
       - name: Setup Infracost
-        uses: infracost/actions/setup@v1
+        uses: infracost/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
